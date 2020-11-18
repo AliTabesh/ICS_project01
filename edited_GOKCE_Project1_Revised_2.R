@@ -21,7 +21,7 @@ data_1999<-filter(data_2019_1999,  year == "1999")
 par(mfrow=c(1,2))
 hgF<-hist(data_2019$life.expectancy.female,
           main = "Life expectancy of female | 2019",
-          xlab = "Age")
+          xlab = "Year")
 
 abline(v=mean(data_2019$life.expectancy.female),col="blue")
 abline(v=median(data_2019$life.expectancy.female),col="red")
@@ -37,7 +37,7 @@ abline(v=median(data_2019$life.expectancy.male),col="red")
 
 hgB<-hist(data_2019$life.expectancy.both.sexes,
           main = "Life expectancy of both sexes | 2019",
-          xlab = "Age")
+          xlab = "Year")
 abline(v=mean(data_2019$life.expectancy.both.sexes),col="blue")
 abline(v=median(data_2019$life.expectancy.both.sexes),col="red")
 
@@ -82,10 +82,10 @@ denscomp(list(fit.in1,fit.in2,fit.in3,fit.in4,fit.in5,fit.in6),xlab = "Life expe
 
 #------life expectancy female 1999 vs.2019--------------------------
 
-boxplot(data_2019$life.expectancy.female, 
-        data_1999$life.expectancy.female,
-        main = "Life expectancy of female \n  2019 | 1999",
-        xlab = "age")
+boxplot(data_1999$life.expectancy.female,
+        data_2019$life.expectancy.female, 
+        main = "Life expectancy of females \n  1999 | 2019",
+        xlab = "Year")
         
 
 
@@ -93,65 +93,65 @@ boxplot(data_2019$life.expectancy.female,
 par(mfrow=c(1,2))
 hg2019F<-boxplot(data_2019$life.expectancy.female,
           main = "Life expectancy of female | 2019",
-          xlab = "age")
+          xlab = "Year")
 ?boxplot
 
 hg1999F<-boxplot(data_1999$life.expectancy.female,
           main = "Life expectancy of female | 1999",
-          xlab = "age")
+          xlab = "Year")
 
 #------life expectancy male 1999 vs.2019-------------------------
 
-boxplot(data_2019$life.expectancy.male, 
-        data_1999$life.expectancy.male,
-        main = "Life expectancy of male \n  2019 | 1999",
-        xlab = "age")
+boxplot(data_1999$life.expectancy.male,
+        data_2019$life.expectancy.male, 
+        main = "Life expectancy of males \n  1999 | 2019",
+        xlab = "Year")
 
 
 
 par(mfrow=c(1,2))
 hg2019M<-boxplot(data_2019$life.expectancy.male,
               main = "Life expectancy of male | 2019",
-              xlab = "Age")
+              xlab = "Year")
 hg1999M<-boxplot(data_1999$life.expectancy.male,
               main = "Life expectancy of male | 1999",
-              xlab = "Age")
+              xlab = "Year")
 
 #------life expectancy both sexes 1999 vs.2019-------------------------
 
-boxplot(data_2019$life.expectancy.both.sexes, 
-        data_1999$life.expectancy.both.sexes,
-        main = "Life expectancy of bothsexes \n  2019 | 1999",
-        xlab = "age")
+boxplot(data_1999$life.expectancy.both.sexes,
+        data_2019$life.expectancy.both.sexes, 
+        main = "Life expectancy of both sexes \n  1999 | 2019",
+        xlab = "Year")
 
 
 par(mfrow=c(1,2))
 hg2019B<-boxplot(data_2019$life.expectancy.both.sexes,
               main = "Life expectancy of both sexes | 2019",
-              xlab = "Age")
+              xlab = "Year")
 
 hg1999B<-boxplot(data_1999$life.expectancy.both.sexes,
               main = "Life expectancy of both sexes | 1999",
-              xlab = "Age")
+              xlab = "Year")
 
 #------TOTAL FETILITY PER WOMAN 1999 vs.2019-------------------------
 
-boxplot(data_2019$total.fertility.rate.per.woman, 
-        data_1999$total.fertility.rate.per.woman,
-        main = "total fertility per woman \n  2019 | 1999",
-        xlab = "age")
+boxplot(data_1999$total.fertility.rate.per.woman,
+        data_2019$total.fertility.rate.per.woman, 
+        main = "Total fertility per woman \n  1999 | 2019",
+        xlab = "Year")
 
 
 
 par(mfrow=c(1,2))
 hg2019Fe<-boxplot(data_2019$total.fertility.rate.per.woman,
               main = "total fertility per woman | 2019",
-              xlab = "range of age")
+              xlab = "range of Year")
 
 
 hg1999Fe<-boxplot(data_1999$total.fertility.rate.per.woman,
               main = "total fertility per woman | 1999",
-              xlab = "range of age")
+              xlab = "range of Year")
 
 
 
