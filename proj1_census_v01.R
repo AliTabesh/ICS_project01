@@ -171,7 +171,7 @@ varianceInRegions[22, 3] <- var(dataOf2019[ , 5])
 varianceInRegions[22, 4] <- var(dataOf2019[ , 6])
 varianceInRegions[22, 5] <- var(dataOf2019[ , 7])
 
-varianceInRegions
+write.csv(varianceInRegions,"Variance_table.csv", row.names = FALSE)
 
 #ggplot(varianceInRegions, aes(x = uniqueRegions, y = total.fertility.rate.per.woman)) + geom_point()
 
