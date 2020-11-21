@@ -31,8 +31,12 @@ summaryOf2019 <- summary(censusData)
 DataExplorer::plot_histogram(dataOf2019, ggtheme = ggpubr::theme_pubr())
 
 # histogram of data from library "ggplot2"*****************************************************
-fertality_hitogram <- ggplot(data = dataOf2019, aes(total.fertility.rate.per.woman)) +
-    geom_histogram() + xlab("Total fertility rate per woman")
+fertality_hitogram <- ggplot(data = dataOf2019, aes(total.fertility.rate.per.woman, group = total.fertility.rate.per.woman)) +
+    geom_histogram() +
+    geom_vline(aes(color = "Mean"), xintercept=mean(dataOf2019$total.fertility.rate.per.woman), linetype="dashed", color = "blue", show.legend = TRUE) +
+    geom_vline(aes(color = "Median"), xintercept=median(dataOf2019$total.fertility.rate.per.woman), linetype="dashed", color = "red", show.legend = TRUE) +
+    scale_colour_manual("Lines", values = c("blue", "red")) +
+    xlab("Total fertility rate per woman")
 bothSexes_histogram <- ggplot(data = dataOf2019, aes(life.expectancy.both.sexes)) +
     geom_histogram() + xlab("Life expectancy of both")
 maleLE_histogram <- ggplot(data = dataOf2019, aes(life.expectancy.male)) +
@@ -50,6 +54,15 @@ grid.arrange(fertality_hitogram, bothSexes_histogram, maleLE_histogram, femaleLE
 #frequency table****************************************************************
 as.table(summaryOf2019[,4:7])
 #-------------------------------------------------------------------TASK 2------
+#Scatter plot
+ggplot(dataOf2019,aes(x=life.expectancy.male, y=life.expectancy.female )) +
+    geom_point() +
+    geom_smooth(method='lm', formula= y~x, colour="green")
+
+ggplot(dataOf2019,aes(x=total.fertility.rate.per.woman, y=life.expectancy.both.sexes )) +
+    geom_point() +
+    geom_smooth(method='lm', formula= y~x, colour="green")
+
 
 #correlation table NO.1*********************************************************
 ##correlations of all numeric variables except year
@@ -67,17 +80,44 @@ plot_correlation(dataOf2019[,4:7], ggtheme = ggpubr::theme_pubr(base_size = 10),
 #Scatter Plot for showing the variance BETWEEN the regions**********TASK 3.1****
 betweenRegions_plots <-list()  ##list to store plots of task 3.1
 
-betweenRegions_plots[[1]] <- ggplot(data = dataOf2019, aes(x = region, y = total.fertility.rate.per.woman, colour = region)) +
-    geom_boxplot() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+#regionsInOrder <- c("Northern America", "Central America", "South America", "Caribbean", 
+#                    "Western Europe", "Northern Europe", "Southern Europe", "Eastern Europe", 
+#                    "Western Africa", "Southern Africa", "Middle Africa", "Northern Africa", "Eastern Africa", 
+#                    "Western Asia", "South-Central Asia", "South-Eastern Asia", "Eastern Asia", 
+#                    "Micronesia", "Australia/New Zealand", "Melanesia", "Polynesia")
 
-betweenRegions_plots[[2]] <- ggplot(data = dataOf2019, aes(x = region, y = life.expectancy.both.sexes, colour = region)) +
-    geom_boxplot() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+#ordered2019 <- data.frame()
+    
+#for (i in 1:length(regionsInOrder)) {
+#    ordered2019 <- rbind(ordered2019 ,dataOf2019[dataOf2019$region==regionsInOrder[i],])
+#}
 
-betweenRegions_plots[[3]] <- ggplot(data = dataOf2019, aes(x = region, y = life.expectancy.male, colour = region)) +
-    geom_boxplot() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+#Make a copy of dataOf2019 and then to reorder the labels of regions in boxplots add 
+# uppercase letters in desired order at the beginning of each row in region column 
+ordered2019 <- dataOf2019
+for (i in 1:length(regionsInOrder)) {
+    ordered2019[ordered2019$region==regionsInOrder[i],1] <- paste(LETTERS[i],")"," ", ordered2019[ordered2019$region==regionsInOrder[i],1], sep = "")
+}
 
-betweenRegions_plots[[4]] <- ggplot(data = dataOf2019, aes(x = region, y = life.expectancy.female, colour = region)) +
-    geom_boxplot() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+betweenRegions_plots[[1]] <- ggplot(data = ordered2019, aes(x = region, y = total.fertility.rate.per.woman, colour = region)) +
+    geom_boxplot() + 
+    geom_hline(yintercept=mean(ordered2019$total.fertility.rate.per.woman), linetype="dashed", color = "red") +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+betweenRegions_plots[[2]] <- ggplot(data = ordered2019, aes(x = region, y = life.expectancy.both.sexes, colour = region)) +
+    geom_boxplot() + 
+    geom_hline(yintercept=mean(dataOf2019$life.expectancy.both.sexes), linetype="dashed", color = "red") +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+betweenRegions_plots[[3]] <- ggplot(data = ordered2019, aes(x = region, y = life.expectancy.male, colour = region)) +
+    geom_boxplot() + 
+    geom_hline(yintercept=mean(dataOf2019$life.expectancy.male), linetype="dashed", color = "red") +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+betweenRegions_plots[[4]] <- ggplot(data = ordered2019, aes(x = region, y = life.expectancy.female, colour = region)) +
+    geom_boxplot() +     
+    geom_hline(yintercept=mean(dataOf2019$life.expectancy.female), linetype="dashed", color = "red") +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
 grid.arrange(grobs = betweenRegions_plots, nrow = 2)
 
