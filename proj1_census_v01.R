@@ -57,11 +57,13 @@ as.table(summaryOf2019[,4:7])
 #Scatter plot
 ggplot(dataOf2019,aes(x=life.expectancy.male, y=life.expectancy.female )) +
     geom_point() +
-    geom_smooth(method='lm', formula= y~x, colour="green")
+    geom_smooth(method='lm', formula= y~x, colour="green") +
+    labs(x="Male Life Expectancy", y="Female Life Expectancy") 
 
 ggplot(dataOf2019,aes(x=total.fertility.rate.per.woman, y=life.expectancy.both.sexes )) +
     geom_point() +
-    geom_smooth(method='lm', formula= y~x, colour="green")
+    geom_smooth(method='lm', formula= y~x, colour="green") + 
+    labs(x="Fertility rate per Woman", y="Life Expectancy for both sexes")
 
 
 #correlation table NO.1*********************************************************
@@ -102,22 +104,26 @@ for (i in 1:length(regionsInOrder)) {
 betweenRegions_plots[[1]] <- ggplot(data = ordered2019, aes(x = region, y = total.fertility.rate.per.woman, colour = region)) +
     geom_boxplot() + 
     geom_hline(yintercept=mean(ordered2019$total.fertility.rate.per.woman), linetype="dashed", color = "red") +
-    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+    labs(x="Regions", y="Fertility rate per Woman")
 
 betweenRegions_plots[[2]] <- ggplot(data = ordered2019, aes(x = region, y = life.expectancy.both.sexes, colour = region)) +
     geom_boxplot() + 
     geom_hline(yintercept=mean(dataOf2019$life.expectancy.both.sexes), linetype="dashed", color = "red") +
-    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+    labs(x="Regions", y="Life Expectency for both sexes")
 
 betweenRegions_plots[[3]] <- ggplot(data = ordered2019, aes(x = region, y = life.expectancy.male, colour = region)) +
     geom_boxplot() + 
     geom_hline(yintercept=mean(dataOf2019$life.expectancy.male), linetype="dashed", color = "red") +
-    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+    labs(x="Regions", y="Male Life Expectency")
 
 betweenRegions_plots[[4]] <- ggplot(data = ordered2019, aes(x = region, y = life.expectancy.female, colour = region)) +
     geom_boxplot() +     
     geom_hline(yintercept=mean(dataOf2019$life.expectancy.female), linetype="dashed", color = "red") +
-    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+    labs(x="Regions", y="Female Life Expectancy")
 
 grid.arrange(grobs = betweenRegions_plots, nrow = 2)
 
@@ -196,8 +202,8 @@ varianceInRegions <- data.frame(uniqueRegions)
 for (i in 1:length(uniqueRegions)) {
     
     for (j in 4:7) {
-        varianceInRegions[i,j-2] <- var(dataOf2019[dataOf2019$region==uniqueRegions[i] , j])
-        
+        temp <- var(dataOf2019[dataOf2019$region==uniqueRegions[i] , j])
+        varianceInRegions[i,j-2] <- format(round(temp, 2), nsmall = 2)
     }
     
 }
@@ -206,10 +212,10 @@ colnames(varianceInRegions)[2:5] <- colnames(dataOf2019)[4:7]
 # Now we add the Variance of each column for whole data and save it in last row 
 # and name the last row "World"
 varianceInRegions[22, 1] <- "World"
-varianceInRegions[22, 2] <- var(dataOf2019[ , 4])
-varianceInRegions[22, 3] <- var(dataOf2019[ , 5])
-varianceInRegions[22, 4] <- var(dataOf2019[ , 6])
-varianceInRegions[22, 5] <- var(dataOf2019[ , 7])
+varianceInRegions[22, 2] <- format(round(var(dataOf2019[ , 4]), 2), nsmall = 2)
+varianceInRegions[22, 3] <- format(round(var(dataOf2019[ , 5]), 2), nsmall = 2)
+varianceInRegions[22, 4] <- format(round(var(dataOf2019[ , 6]), 2), nsmall = 2)
+varianceInRegions[22, 5] <- format(round(var(dataOf2019[ , 7]), 2), nsmall = 2)
 
 write.csv(varianceInRegions,"Variance_table.csv", row.names = FALSE)
 
