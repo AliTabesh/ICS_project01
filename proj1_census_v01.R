@@ -5,22 +5,16 @@ library(DataExplorer)
 library(stats)
 library(gridExtra)
 
-#library(lemon) ## to print dataframes in a table format in R markdown (run both lines)
-#knit_print.data.frame <- lemon_print   ##(run both lines)
-
 #reading the data
 censusData <- read.csv("census_2019_1999.csv")
 #check the data dimentions and features
 str(censusData)
-
-#colnames(censusData) <- c("region", "country", "year", "total fertility per woman", "both sexes LE", "men LE", "women LE")
 
 #make a new dataframe consists of just the data in year 2019 
 indexOf2019 <- censusData[["year"]]==2019
 dataOf2019 <- censusData[indexOf2019,]
 
 summaryOf2019 <- summary(censusData)
-
 
 #-------------------------------------------------------------------TASK 1------
 # histogram of data from library "DataExplorer"***********************************************************
@@ -47,12 +41,6 @@ femaleLE_histogram <- ggplot(data = dataOf2019, aes(life.expectancy.female)) +
 
 grid.arrange(fertality_hitogram, bothSexes_histogram, maleLE_histogram, femaleLE_histogram, nrow = 1)
 
-## If necessary then we add boxplots for first task here 
-# boxplot of data from library "DataExplorer"***********************************
-# boxplot of data from library "ggplot2"****************************************
-
-#frequency table****************************************************************
-as.table(summaryOf2019[,4:7])
 #-------------------------------------------------------------------TASK 2------
 #Scatter plot
 ggplot(dataOf2019,aes(x=life.expectancy.male, y=life.expectancy.female )) +
@@ -78,21 +66,17 @@ corrplot.mixed(cor_numVar, tl.col="black", tl.pos = "lt")
 ### question: what does the other parameters and "theme_pubr()" do?
 plot_correlation(dataOf2019[,4:7], ggtheme = ggpubr::theme_pubr(base_size = 10),
                                type = "c", cor_args = list(use = "complete.obs"))
+
+
 #-------------------------------------------------------------------TASK 3------
 #Scatter Plot for showing the variance BETWEEN the regions**********TASK 3.1****
 betweenRegions_plots <-list()  ##list to store plots of task 3.1
 
-#regionsInOrder <- c("Northern America", "Central America", "South America", "Caribbean", 
-#                    "Western Europe", "Northern Europe", "Southern Europe", "Eastern Europe", 
-#                    "Western Africa", "Southern Africa", "Middle Africa", "Northern Africa", "Eastern Africa", 
-#                    "Western Asia", "South-Central Asia", "South-Eastern Asia", "Eastern Asia", 
-#                    "Micronesia", "Australia/New Zealand", "Melanesia", "Polynesia")
-
-#ordered2019 <- data.frame()
-    
-#for (i in 1:length(regionsInOrder)) {
-#    ordered2019 <- rbind(ordered2019 ,dataOf2019[dataOf2019$region==regionsInOrder[i],])
-#}
+regionsInOrder <- c("Northern America", "Central America", "South America", "Caribbean", 
+                    "Western Europe", "Northern Europe", "Southern Europe", "Eastern Europe", 
+                    "Western Africa", "Southern Africa", "Middle Africa", "Northern Africa", "Eastern Africa", 
+                    "Western Asia", "South-Central Asia", "South-Eastern Asia", "Eastern Asia", 
+                    "Micronesia", "Australia/New Zealand", "Melanesia", "Polynesia")
 
 #Make a copy of dataOf2019 and then to reorder the labels of regions in boxplots add 
 # uppercase letters in desired order at the beginning of each row in region column 
@@ -130,7 +114,7 @@ grid.arrange(grobs = betweenRegions_plots, nrow = 2)
 
 #Plot for showing the variance WITHIN each regions******************TASK 3.2.1**
 
-uniqueRegions <- unique(dataOf2019$region)
+uniqueRegions <- unique(ordered2019$region)
 
 fertility_scatter_plots <- list()
 for (i in 1:length(uniqueRegions)) {
@@ -202,22 +186,15 @@ varianceInRegions <- data.frame(uniqueRegions)
 for (i in 1:length(uniqueRegions)) {
     
     for (j in 4:7) {
-        temp <- var(dataOf2019[dataOf2019$region==uniqueRegions[i] , j])
+        temp <- var(dataOf2019[ordered2019$region==uniqueRegions[i] , j])
         varianceInRegions[i,j-2] <- format(round(temp, 2), nsmall = 2)
     }
     
 }
-colnames(varianceInRegions)[2:5] <- colnames(dataOf2019)[4:7]
+colnames(varianceInRegions)[2:5] <- colnames(ordered2019)[4:7]
 
 # Now we add the Variance of each column for whole data and save it in last row 
 # and name the last row "World"
-varianceInRegions[22, 1] <- "World"
-varianceInRegions[22, 2] <- format(round(var(dataOf2019[ , 4]), 2), nsmall = 2)
-varianceInRegions[22, 3] <- format(round(var(dataOf2019[ , 5]), 2), nsmall = 2)
-varianceInRegions[22, 4] <- format(round(var(dataOf2019[ , 6]), 2), nsmall = 2)
-varianceInRegions[22, 5] <- format(round(var(dataOf2019[ , 7]), 2), nsmall = 2)
-
 write.csv(varianceInRegions,"Variance_table.csv", row.names = FALSE)
 
-#ggplot(varianceInRegions, aes(x = uniqueRegions, y = total.fertility.rate.per.woman)) + geom_point()
 
